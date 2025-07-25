@@ -1,12 +1,67 @@
-# COMAJSONServer.py 
-# encapsulate Jan Kleyna's COMA JSON API for Python
+# comadb.py
+# Extract and Transform digital assets for a single comet
+# in PDS4 SBN archive format and create a tarball for export
 
 import os
 import json
 import psycopg2
 import logging
+import argparse
 from dict2xml import dict2xml
+import xml.etree.ElementTree as ET
+from xml.dom import minidom
 
+class COMAPDS:
+  def __init__(self):
+    self.debug=False
+    self.config = {
+      'path': os.getenv('COMA_PDS_PATH', default="/pds/export"),
+    }
+
+  def PrettifyXML(self, xml):
+    """
+    Return a pretty-printed XML string for the Element.
+    This makes the output file human-readable.
+    """
+    # Convert the ElementTree object to a rough string
+    rough_string = ET.tostring(xml, 'utf-8')
+    # Use minidom to parse and prettify the string
+    reparsed = minidom.parseString(rough_string)
+    # toprettyxml() adds indentation and newlines
+    return reparsed.toprettyxml(indent="  ")
+
+  def WriteBundle(self, bundle_lid, xml):
+    file_path = self.config['path'] + os.sep + bundle_lid + '.xml'
+    mode = 'w'
+    #xml_string = self.PrettifyXML(xml)
+    xml_string = xml
+    try:
+      # Ensure the directory exists before trying to write the file
+      # os.path.dirname gets the directory portion of the file_path
+      directory = os.path.dirname(file_path)
+      if directory: # Check if a directory path was even provided
+        os.makedirs(directory, exist_ok=True)
+
+      # Use 'with open' to handle the file resource automatically.
+      # It ensures the file is closed even if an error occurs.
+      # The 'encoding='utf-8'' is best practice for handling various characters.
+      with open(file_path, mode, encoding='utf-8') as f:
+        # Iterate through each string in the list
+        for line in xml_string:
+          # Write each string to the file, followed by a newline character
+          f.write(line)
+
+      return True
+
+    except IOError as e:
+        # Handle file-related errors (e.g., permission denied)
+        print(f"Error: Could not write to file {file_path}. Reason: {e}")
+        return False
+    except Exception as e:
+        # Handle other potential errors
+        print(f"An unexpected error occurred: {e}")
+        return False
+    
 class COMADB:
   # default constructor
 
@@ -54,12 +109,14 @@ class COMADB:
     # execute a SQL statement
     # TODO check for sql injection
     logging.debug(dmlSQL)
-    ret =  self.cursor.execute(dmlSQL, dmlData)
+    #ret =  self.cursor.execute(dmlSQL, dmlData)
+    ret =  self.cursor.execute(dmlSQL)
     logging.debug("return code: " + str(ret))
     if ret == 2006:
       self.CloseDB()
       self.OpenDB()
-      ret =  self.cursor.execute(dmlSQL, dmlData)
+      #ret =  self.cursor.execute(dmlSQL, dmlData)
+      ret =  self.cursor.execute(dmlSQL)
     return ret
  
   def GetResultHeaders(self):
@@ -81,6 +138,7 @@ class COMADB:
         else:
           row.append(r)
       self.column_values.append(row)
+      #self.column_values.append(results)
       #self.column_values.append(dict(zip(self.column_headers,result)))
     return self.column_values
  
@@ -125,7 +183,7 @@ class COMADB:
     self.Run(queryStr)
     col_keys = self.GetResultHeaders()
     col_values = self.GetResults()
-    return { 'keys': col_keys, 'values': col_values}
+    return { 'cols': col_keys, 'rows': col_values}
 
   def GetObjectID(self, bundle_lid):
     tableStr = 'objects'
@@ -189,64 +247,58 @@ class COMADB:
   #a subroutine to get a list of all objects by id with some columns
   def ListObjects(self):
     tableStr = 'objects'
-    idStr = 'objectid'
-    orderStr = 'defaultobjectname'
-    colStr = 'defaultobjectname, sbn_targetname, pds4_lid, objecttype_jpl, objecttype_coma'
+    idStr = 'id'
+    orderStr = 'ui_name'
+    colStr = 'ui_name, name, pds4_lid, photometry_begins, photometry_ends'
     queryStr = "SELECT %s, %s from %s ORDER BY %s;" % (idStr, colStr, tableStr, orderStr)
     self.Run(queryStr)
     col_keys = self.GetResultHeaders()
     col_values = self.GetResults()
-    return { 'keys': col_keys, 'values': col_values}
-
-## imageid                   | int(11)     | NO   | PRI | NULL    |       |
-## calibrationid             | int(11)     | NO   |     | NULL    |       |
-## instrumentid              | int(11)     | NO   |     | NULL    |       |
-## mjd_middle                | double      | YES  |     | NULL    |       |
-## filter                    | char(2)     | YES  |     | NULL    |       |
-## nstars                    | int(11)     | YES  |     | NULL    |       |
-## zpmag                     | double      | YES  |     | NULL    |       |
-## zpmag_error               | double      | YES  |     | NULL    |       |
-## extinction                | double      | YES  |     | NULL    |       |
-## extinction_error          | double      | YES  |     | NULL    |       |
-## colorterm                 | double      | YES  |     | NULL    |       |
-## colorterm_error           | double      | YES  |     | NULL    |       |
-## zpinstmag                 | double      | YES  |     | NULL    |       |
-## zpinstmag_err             | double      | YES  |     | NULL    |       |
-## pixel_scale               | double      | YES  |     | NULL    |       |
-## psf_nobj                  | int(11)     | YES  |     | NULL    |       |
-## psf_fwhm_arcsec           | double      | YES  |     | NULL    |       |
-## psf_major_axis_arcsec     | double      | YES  |     | NULL    |       |
-## psf_minor_axis_arcsec     | double      | YES  |     | NULL    |       |
-## psf_pa_pix                | double      | YES  |     | NULL    |       |
-## psf_pa_world              | double      | YES  |     | NULL    |       |
-## limit_mag_5_sigma         | double      | YES  |     | NULL    |       |
-## limit_mag_10_sigma        | double      | YES  |     | NULL    |       |
-## ndensity_mag_20           | double      | YES  |     | NULL    |       |
-## ndensity_5_sigma          | double      | YES  |     | NULL    |       |
-## sky_backd_adu_pix         | double      | YES  |     | NULL    |       |
-## sky_backd_photons_pix     | double      | YES  |     | NULL    |       |
-## sky_backd_adu_arcsec2     | double      | YES  |     | NULL    |       |
-## sky_backd_photons_arcsec2 | double      | YES  |     | NULL    |       |
-## sky_backd_mag_arcsec2     | double      | YES  |     | NULL    |       |
+    return { 'cols': col_keys, 'rows': col_values}
 
 def main():
+  """Extract and Transform digital assets for a single comet in PDS4 SBN archive format and create a tarball for export.
+
+  Parameters:
+    COMA bundle_lid (str): The unique COMA bundle ID for a comet. E.g. coma_9p.
+
+  Returns:
+    None
+
+  Examples:
+    python comadb.py coma_9p
+  """
+   
+  parser = argparse.ArgumentParser(description='A simple script demonstrating argparse.')
+
+  #parser.add_argument('bundle_lid', type=str, help='the unique COMA bundle LID for a comet')
+
+  parser.add_argument('--list', action='store_true', help='List the unique COMA bundle LIDs')
+  parser.add_argument('--comet', type=str, help='the unique COMA bundle LID for a comet')
+  args = parser.parse_args()
+
   db = COMADB()
 
-  #bundle_lid = "coma.9p"
-  bundle_lid = "coma.c-2017-k2"
-  #id = db.GetObjectID(bundle_lid)
-  obj_data = db.GetObject(bundle_lid)
+  if args.list:
+    result = db.ListObjects()
+  elif args.comet is not None:
+    bundle_lid = args.comet
+    #id = db.GetObjectID(bundle_lid)
+    result = db.GetObject(bundle_lid)
 #  print('{')
 #  for i in range( len(obj_data['keys']) ):
 #    print('  "%s": "%s",' %(obj_data['keys'][i], obj_data['values'][0][i]))
 #  print('}')
 
-  obj_dict = {}
-  for i in range( len(obj_data['keys']) ):
-    obj_dict[obj_data['keys'][i]] = obj_data['values'][0][i]
-  obj_xml = dict2xml(obj_dict)
-  print(obj_dict)
-  print(obj_xml)
+  for r in range( len(result['rows']) ):
+    obj_dict = {}
+    for c in range( len(result['cols']) ):
+      obj_dict[result['cols'][c]] = result['rows'][r][c]
+    #print(obj_dict)
+    obj_xml = dict2xml(obj_dict, wrap="", indent="  ", newlines=True)
+    #print(obj_xml)
+    pds = COMAPDS()
+    pds.WriteBundle(bundle_lid, obj_xml)
 
 if __name__ == "__main__":
   main()
