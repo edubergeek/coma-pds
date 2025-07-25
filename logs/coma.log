@@ -1,0 +1,49 @@
+DEBUG:root:OpenDB: {'host': '172.17.0.1', 'port': 5433, 'user': 'coma', 'password': 'ChangeMePlease', 'database': 'coma'}
+DEBUG:root:SELECT * from objects WHERE pds4_lid = 'coma.c-2017-k2';
+DEBUG:root:OpenDB: {'host': '172.17.0.1', 'port': 5433, 'user': 'coma', 'password': 'ChangeMePlease', 'database': 'coma'}
+DEBUG:root:SELECT * from objects WHERE pds4_lid = 'coma.c-2017-k2';
+DEBUG:root:OpenDB: {'host': '172.17.0.1', 'port': 5433, 'user': 'coma', 'password': 'ChangeMePlease', 'database': 'coma'}
+DEBUG:root:SELECT * from objects WHERE pds4_lid = 'coma.c-2017-k2';
+DEBUG:root:return code: None
+DEBUG:root:OpenDB: {'host': '172.17.0.1', 'port': 5433, 'user': 'coma', 'password': 'ChangeMePlease', 'database': 'coma'}
+DEBUG:root:SELECT * from objects WHERE pds4_lid = 'coma.c-2017-k2';
+DEBUG:root:return code: None
+DEBUG:root:OpenDB: {'host': '172.17.0.1', 'port': 5433, 'user': 'coma', 'password': 'ChangeMePlease', 'database': 'coma'}
+DEBUG:root:SELECT * from objects WHERE pds4_lid = 'coma.c-2017-k2';
+DEBUG:root:return code: None
+DEBUG:root:OpenDB: {'host': '172.17.0.1', 'port': 5433, 'user': 'coma', 'password': 'ChangeMePlease', 'database': 'coma'}
+DEBUG:root:SELECT * from objects WHERE pds4_lid = 'coma.c-2017-k2';
+DEBUG:root:return code: None
+DEBUG:root:OpenDB: {'host': '172.17.0.1', 'port': 5433, 'user': 'coma', 'password': 'ChangeMePlease', 'database': 'coma'}
+DEBUG:root:SELECT * from objects WHERE pds4_lid = 'coma.c-2017-k2';
+DEBUG:root:return code: None
+DEBUG:root:OpenDB: {'host': '172.17.0.1', 'port': 5433, 'user': 'coma', 'password': 'ChangeMePlease', 'database': 'coma'}
+DEBUG:root:SELECT * from objects WHERE pds4_lid = 'coma.c-2017-k2';
+DEBUG:root:return code: None
+DEBUG:root:OpenDB: {'host': '172.17.0.1', 'port': 5433, 'user': 'coma', 'password': 'ChangeMePlease', 'database': 'coma'}
+DEBUG:root:SELECT * from objects WHERE pds4_lid = 'coma.c-2017-k2';
+DEBUG:root:return code: None
+DEBUG:root:OpenDB: {'host': '172.17.0.1', 'port': 5433, 'user': 'coma', 'password': 'ChangeMePlease', 'database': 'coma'}
+DEBUG:root:SELECT * from objects WHERE pds4_lid = 'coma.c-2017-k2';
+DEBUG:root:return code: None
+DEBUG:root:OpenDB: {'host': '172.17.0.1', 'port': 5433, 'user': 'coma', 'password': 'ChangeMePlease', 'database': 'coma'}
+DEBUG:root:SELECT * from objects WHERE pds4_lid = 'coma.c-2017-k2';
+DEBUG:root:return code: None
+DEBUG:root:OpenDB: {'host': '172.17.0.1', 'port': 5433, 'user': 'coma', 'password': 'ChangeMePlease', 'database': 'coma'}
+DEBUG:root:SELECT * from objects WHERE pds4_lid = 'coma.c-2017-k2';
+DEBUG:root:return code: None
+DEBUG:root:OpenDB: {'host': '172.17.0.1', 'port': 5433, 'user': 'coma', 'password': 'ChangeMePlease', 'database': 'coma'}
+DEBUG:root:SELECT * from objects WHERE pds4_lid = 'coma.c-2017-k2';
+DEBUG:root:return code: None
+DEBUG:root:OpenDB: {'host': '172.17.0.1', 'port': 5433, 'user': 'coma', 'password': 'ChangeMePlease', 'database': 'coma'}
+DEBUG:root:SELECT * from objects WHERE pds4_lid = 'coma.c-2017-k2';
+DEBUG:root:return code: None
+DEBUG:root:OpenDB: {'host': '172.17.0.1', 'port': 5433, 'user': 'coma', 'password': 'ChangeMePlease', 'database': 'coma'}
+DEBUG:root:SELECT * from objects WHERE pds4_lid = 'coma.c-2017-k2';
+DEBUG:root:return code: None
+DEBUG:root:OpenDB: {'host': '172.17.0.1', 'port': 5433, 'user': 'coma', 'password': 'ChangeMePlease', 'database': 'coma'}
+DEBUG:root:SELECT * from objects WHERE pds4_lid = 'coma.c-2017-k2';
+DEBUG:root:return code: None
+DEBUG:root:OpenDB: {'host': '172.17.0.1', 'port': 5433, 'user': 'coma', 'password': 'ChangeMePlease', 'database': 'coma'}
+DEBUG:root:SELECT * from objects WHERE pds4_lid = 'coma.c-2017-k2';
+DEBUG:root:return code: None

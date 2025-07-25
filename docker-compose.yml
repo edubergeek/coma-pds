@@ -1,0 +1,30 @@
+services:
+
+  pds:
+    build: .
+    image: pds
+    container_name: pds
+    command: tail -f /dev/null
+    volumes:
+      - .:/pds
+      - /COMA/bundle:/bundle
+      - /COMA/collection:/collection
+    environment:
+      - APP_SETTINGS=project.server.config.DevelopmentConfig
+      - COMA_DB_HOST=${COMA_DB_HOST}
+      - COMA_DB_PORT=${COMA_DB_PORT}
+      - COMA_DB_NAME=${COMA_DB_NAME}
+      - COMA_DB_USER=${COMA_DB_USER}
+      - COMA_DB_PASS=${COMA_DB_PASS}
+    networks:
+      - coma-pds
+#    networks:
+#      - backend
+#       default:
+#         ipv4_address: 192.168.32.5
+
+
+networks:
+  coma-pds:
+    driver: bridge
+
